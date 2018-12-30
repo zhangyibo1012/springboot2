@@ -2,6 +2,7 @@ package cn.zyblogs.webflux2.handler;
 
 import cn.zyblogs.webflux.domain.User;
 import cn.zyblogs.webflux.repository.UserRepository;
+import cn.zyblogs.webflux.util.CheckUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -28,8 +29,13 @@ public class UserHandler {
 
     public Mono<ServerResponse> createUser(ServerRequest request){
         Mono<User> user = request.bodyToMono(User.class);
-        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(userRepository.saveAll(user), User.class);
+//        需要操作使用flatMap
+        return user.flatMap(u ->{
+//            效验代码
+            CheckUtil.checkName(u.getName());
+            return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON_UTF8)
+                    .body(userRepository.save(u), User.class);
+        });
     }
 
     public Mono<ServerResponse> deleteUserById(ServerRequest request) {
