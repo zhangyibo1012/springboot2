@@ -18,7 +18,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
 public class AllRouters {
-
 	@Bean
 	RouterFunction<ServerResponse> userRouter(UserHandler handler) {
 //		next 嵌套
@@ -29,8 +28,7 @@ public class AllRouters {
 				// 得到所有用户
 				route(GET("/"), handler::getAllUser)
 				// 创建用户
-				.andRoute(POST("/").and(accept(MediaType.APPLICATION_JSON_UTF8)),
-								handler::createUser)
+				.andRoute(POST("/").and(accept(MediaType.APPLICATION_JSON_UTF8)),handler::createUser)
 				// 删除用户
 				.andRoute(DELETE("/{id}"), handler::deleteUserById));
 	}

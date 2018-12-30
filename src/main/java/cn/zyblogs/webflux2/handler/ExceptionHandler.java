@@ -27,12 +27,9 @@ public class ExceptionHandler implements WebExceptionHandler {
 		response.setStatusCode(HttpStatus.BAD_REQUEST);
 		// 设置返回类型
 		response.getHeaders().setContentType(MediaType.TEXT_PLAIN);
-
 		// 异常信息
 		String errorMsg = toStr(ex);
-
 		DataBuffer db = response.bufferFactory().wrap(errorMsg.getBytes());
-
 		return response.writeWith(Mono.just(db));
 	}
 
